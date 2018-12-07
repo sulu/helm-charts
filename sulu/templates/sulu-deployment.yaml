@@ -1,0 +1,116 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "sulu.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "sulu.name" . }}
+    helm.sh/chart: {{ include "sulu.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  replicas: {{ .Values.app.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "sulu.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  serviceName: {{ include "sulu.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "sulu.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      volumes:
+{{- if .Values.google.enabled }}
+        - name: google-bucket-config
+          secret:
+              secretName: {{ template "sulu.fullname" . }}-google-config
+              items:
+              -   key: key.json
+                  path: key.json
+{{- end }}
+        - name: public-uploads
+          emptyDir: {}
+        - name: cache-volume
+          emptyDir: {}
+        - name: log-volume
+          emptyDir: {}
+        - name: indexes-volume
+          emptyDir: {}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
+          imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+          volumeMounts:
+{{- if .Values.google.enabled }}
+            - name: google-bucket-config
+              mountPath: /etc/google
+{{- end }}
+            - name: public-uploads
+              mountPath: /var/www/html/public/uploads
+            - name: log-volume
+              mountPath: /var/www/html/var/log
+            - name: cache-volume
+              mountPath: /var/www/html/var/cache
+            - name: indexes-volume
+              mountPath: /var/www/html/var/indexes
+          env:
+            - name: APP_ENV
+              value: {{ .Values.app.app_env }}
+            - name: APP_SECRET
+              value: {{ .Values.app.secret }}
+            - name: SULU_ADMIN_EMAIL
+              value: {{ .Values.app.email }}
+            - name: VARNISH_SERVER
+              value: {{ template "sulu.varnish.fullname" . }}
+            - name: REDIS_HOST
+              value: {{ template "sulu.redis.fullname" . }}
+            - name: REDIS_PASSWORD
+              value: {{ .Values.redis.password | quote }}
+            - name: DATABASE_URL
+              value: {{ template "sulu.mysql.url" . }}
+{{- if .Values.google.enabled }}
+            - name: GOOGLE_BUCKET
+              value: {{ .Values.google.bucket }}
+            - name: GOOGLE_KEY_FILE
+              value: /etc/google/key.json
+{{- end }}
+{{- with .Values.app.env }}
+{{ toYaml . | indent 12 }}
+{{- end }}
+#              Secret will be recreated on upgrade
+#              https://github.com/helm/charts/issues/5167
+#              valueFrom:
+#                  secretKeyRef:
+#                      name: {{ template "sulu.mysql.fullname" . }}
+#                      key: mysql-password
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+{{ toYaml .Values.app.resources | indent 12 }}
+    {{- with .Values.app.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.app.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.app.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

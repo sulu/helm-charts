@@ -1,0 +1,27 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: {{ include "sulu.fullname" . }}-ingress
+    labels:
+        app.kubernetes.io/name: {{ include "sulu.name" . }}
+        helm.sh/chart: {{ include "sulu.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.ingress.annotations }}
+    annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+spec:
+    rules:
+        - http:
+              paths:
+                  - path: /admin
+                    backend:
+                        serviceName: {{ include "sulu.fullname" . }}
+                        servicePort: http
+                  - path: /
+                    backend:
+                        serviceName: {{ include "sulu.varnish.fullname" . }}
+                        servicePort: http
+{{- end }}

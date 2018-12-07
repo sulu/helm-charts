@@ -1,0 +1,81 @@
+# Default values for sulu.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+ingress:
+    enabled: true
+    annotations: {}
+
+varnish:
+    enabled: true
+    configmap: varnish-configmap
+    service:
+        type: NodePort
+        port: 80
+    image:
+        repository: varnish
+        tag: latest
+        pullPolicy: IfNotPresent
+    resources: {}
+
+app:
+    replicaCount: 3
+    service:
+        type: NodePort
+        port: 80
+    image:
+        repository: sulu
+        tag: latest
+        pullPolicy: IfNotPresent
+    resources: {}
+        # We usually recommend not to specify default resources and to leave this as a conscious
+        # choice for the user. This also increases chances charts run on environments with little
+        # resources, such as Minikube. If you do want to specify resources, uncomment the following
+        # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+        # limits:
+        #  cpu: 100m
+        #  memory: 128Mi
+        # requests:
+        #  cpu: 100m
+        #  memory: 128Mi
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    annotations: {}
+    env: {}
+    app_env: prod
+    email: ''
+    secret: ''
+
+google:
+    enabled: false
+    bucket: ''
+    project_id: ''
+    private_key_id: ''
+    private_key: ''
+    client_email: ''
+    client_id: ''
+    client_x509_cert_url: ''
+
+mysql:
+    enabled: true
+    imageTag: 5.7.19
+    mysqlUser: sulu
+    # Secret will be recreated on upgrade
+    # https://github.com/helm/charts/issues/5167
+    mysqlPassword: sulu
+    mysqlDatabase: sulu
+    persistence:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 8Gi
+
+redis:
+    # Secret will be recreated on upgrade
+    # https://github.com/helm/charts/issues/5167
+    password: ''
+    cluster:
+        enabled: false
