@@ -1,0 +1,12 @@
+dependencies:
+    - name: mysql
+      version: 0.10.x
+      repository: https://kubernetes-charts.storage.googleapis.com/
+      condition: mysql.enabled
+    - name: redis
+      version: 3.6.x
+      repository: https://kubernetes-charts.storage.googleapis.com/
+    - name: varnish
+      version: 0.1.x
+      repository: "file://../varnish"
+      condition: varnish.enabled
