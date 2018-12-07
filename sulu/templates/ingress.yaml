@@ -16,11 +16,11 @@ spec:
     rules:
         - http:
               paths:
-                  - path: /admin
+                  - path: /admin/*
                     backend:
                         serviceName: {{ include "sulu.fullname" . }}
                         servicePort: http
-                  - path: /
+                  - path: /*
                     backend:
                         serviceName: {{ include "sulu.varnish.fullname" . }}
                         servicePort: http
