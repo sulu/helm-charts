@@ -5,6 +5,7 @@ lint:
         - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
         # lint charts
         - helm lint varnish
+        - helm lint sulu
 
 build:
     stage: build
@@ -26,6 +27,8 @@ build:
         - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
         # create charts
         - helm package -d build varnish
+        - cd sulu && helm dep build && cd ..
+        - helm package -d build sulu
         # index directory
         - helm repo index build
         # upload new packaged charts
