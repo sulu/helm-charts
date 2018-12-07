@@ -8,6 +8,8 @@ fullnameOverride: ""
 
 configmap: varnish-configmap
 
+readinessPath: '/'
+
 service:
     type: LoadBalancer
     port: 80

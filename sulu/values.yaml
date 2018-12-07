@@ -49,6 +49,7 @@ app:
     app_env: prod
     email: ''
     secret: ''
+    readinessPath: '/'
 
 google:
     enabled: false

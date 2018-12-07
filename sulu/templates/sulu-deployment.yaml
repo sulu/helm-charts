@@ -94,11 +94,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.app.readinessPath }}
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.app.readinessPath }}
               port: http
           resources:
 {{ toYaml .Values.app.resources | indent 12 }}
