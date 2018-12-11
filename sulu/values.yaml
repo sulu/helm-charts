@@ -8,6 +8,10 @@ fullnameOverride: ""
 ingress:
     enabled: true
     annotations: {}
+    tls:
+        enabled: false
+        secretName: ''
+        host: ''
 
 varnish:
     enabled: true

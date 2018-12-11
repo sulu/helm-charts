@@ -24,4 +24,10 @@ spec:
                     backend:
                         serviceName: {{ include "sulu.varnish.fullname" . }}
                         servicePort: http
+{{- if .Values.ingress.tls.enabled -}}
+    tls:
+        - secretName: {{ .Values.ingress.tls.secretName }}
+          hosts:
+              - {{ .Values.ingress.tls.host }}
+{{- end }}
 {{- end }}
