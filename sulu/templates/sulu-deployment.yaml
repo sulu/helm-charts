@@ -74,9 +74,9 @@ spec:
             - name: DATABASE_URL
               value: {{ template "sulu.mysql.url" . }}
 {{- if .Values.google.enabled }}
-            - name: GOOGLE_BUCKET
+            - name: GOOGLE_STORAGE_BUCKET_NAME
               value: {{ .Values.google.bucket }}
-            - name: GOOGLE_KEY_FILE
+            - name: GOOGLE_STORAGE_KEY_FILE
               value: /etc/google/key.json
 {{- end }}
 {{- with .Values.app.env }}
