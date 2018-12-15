@@ -12,6 +12,9 @@ ingress:
         enabled: false
         secretName: ''
         host: ''
+    paths:
+        admin: '/admin/*'
+        website: '/*'
 
 varnish:
     enabled: true
