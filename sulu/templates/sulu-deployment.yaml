@@ -24,6 +24,10 @@ spec:
         app.kubernetes.io/name: {{ include "sulu.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+{{- if .Values.app.image.pullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.app.image.pullSecrets }}
+{{- end }}
       volumes:
 {{- if .Values.google.enabled }}
         - name: google-bucket-config
