@@ -1,36 +1,28 @@
 lint:
     stage: lint
+    image: sulu/helm-gcloud
     script:
-        # install helm
-        - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
-        # lint charts
         - helm lint varnish
         - helm lint sulu
 
 build:
     stage: build
-    script:
-        # install helm
-        - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
-        - helm init --client-only
-        # install gcloud
-        - export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-        - echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-        - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-        - sudo apt-get update
-        - sudo apt-get install -y google-cloud-sdk
+    image: sulu/helm-gcloud
+    before_script:
         # authenticate gcloud
         - echo "$SERVICE_ACCOUNT_KEY" > key.json
         - gcloud auth activate-service-account --key-file=key.json
         # download available chart packages
         - mkdir build
         - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
+    script:
         # create charts
         - helm package -d build varnish
         - cd sulu && helm dep build && cd ..
         - helm package -d build sulu
         # index directory
         - helm repo index build
+    after_script:
         # upload new packaged charts
         - gsutil cp build/* gs://charts.sulu.cloud/
     only:
