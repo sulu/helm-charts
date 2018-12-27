@@ -53,11 +53,18 @@ app:
     tolerations: []
     affinity: {}
     annotations: {}
-    env: {}
+    env: []
     app_env: prod
     email: ''
     secret: ''
     readinessPath: '/'
+    hooks:
+        postInstall:
+            enabled: false
+            command: ["/var/www/html/bin/adminconsole", "sulu:build", "dev"]
+        postUpgrade:
+            enabled: false
+            command: ["/var/www/html/bin/adminconsole", "doctrine:migrations:migrate"]
 
 google:
     enabled: false

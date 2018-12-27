@@ -1,0 +1,27 @@
+{{- if .Values.app.hooks.postUpgrade.enabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-post-upgrade.%d" .Release.Name .Release.Revision | trunc 63 | trimSuffix "-" }}
+  labels:
+    app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+    app.kubernetes.io/instance: {{.Release.Name | quote }}
+    helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+  annotations:
+    helm.sh/hook: post-upgrade
+    helm.sh/hook-weight: "1"
+    helm.sh/hook-delete-policy: hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "{{.Release.Name}}-post-upgrade"
+      labels:
+        app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+        app.kubernetes.io/instance: {{.Release.Name | quote }}
+        helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    spec:
+      restartPolicy: Never
+{{ include (print $.Template.BasePath "/_containerspec.tpl") . | indent 6 }}
+          command:
+{{ toYaml .Values.app.hooks.postUpgrade.command | indent 12 -}}
+{{- end -}}
