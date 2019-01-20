@@ -10,3 +10,8 @@ dependencies:
       version: 1.0.x
       repository: "file://../varnish"
       condition: varnish.enabled
+    - name: media-proxy
+      version: 1.0.x
+      repository: "file://../media-proxy"
+      alias: mediaproxy
+      condition: mediaproxy.enabled
