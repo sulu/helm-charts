@@ -33,7 +33,7 @@ spec:
             httpGet:
               path: {{ .Values.app.readinessPath }}
               port: http
-{{- if .Values.app.readinessAuthentication -}}
+{{- if .Values.app.readinessAuthentication }}
               httpHeaders:
                 - name: Authorization
                   value: Basic {{ .Values.app.readinessAuthentication|b64enc }}
@@ -42,7 +42,7 @@ spec:
             httpGet:
               path: {{ .Values.app.readinessPath }}
               port: http
-{{- if .Values.app.readinessAuthentication -}}
+{{- if .Values.app.readinessAuthentication }}
               httpHeaders:
                 - name: Authorization
                   value: Basic {{ .Values.app.readinessAuthentication|b64enc }}
