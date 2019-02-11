@@ -58,6 +58,7 @@ app:
     email: ''
     secret: ''
     readinessPath: '/'
+    readinessAuthentication: false
     hooks:
         postInstall:
             enabled: false

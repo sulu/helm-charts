@@ -9,6 +9,7 @@ fullnameOverride: ""
 configmap: varnish-configmap
 
 readinessPath: '/'
+readinessAuthentication: false
 
 service:
     type: LoadBalancer
