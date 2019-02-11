@@ -41,9 +41,19 @@ spec:
           httpGet:
             path: {{ .Values.readinessPath }}
             port: http
+{{- if .Values.readinessAuthentication -}}
+            httpHeaders:
+              - name: Authorization
+                value: Basic {{ .Values.readinessAuthentication|b64enc }}
+{{- end }}
         readinessProbe:
           httpGet:
             path: {{ .Values.readinessPath }}
             port: http
+{{- if .Values.readinessAuthentication -}}
+            httpHeaders:
+              - name: Authorization
+                value: Basic {{ .Values.readinessAuthentication|b64enc }}
+{{- end }}
         resources:
 {{ toYaml .Values.resources | indent 12 }}
