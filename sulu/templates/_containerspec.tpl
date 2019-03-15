@@ -11,14 +11,6 @@ volumes:
         - key: key.json
           path: key.json
 {{- end }}
-  - name: public-uploads
-    emptyDir: {}
-  - name: cache-volume
-    emptyDir: {}
-  - name: log-volume
-    emptyDir: {}
-  - name: indexes-volume
-    emptyDir: {}
 containers:
   - name: {{ .Chart.Name }}
     image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
@@ -28,14 +20,6 @@ containers:
       - name: google-bucket-config
         mountPath: /etc/google
 {{- end }}
-      - name: public-uploads
-        mountPath: /var/www/html/public/uploads
-      - name: log-volume
-        mountPath: /var/www/html/var/log
-      - name: cache-volume
-        mountPath: /var/www/html/var/cache
-      - name: indexes-volume
-        mountPath: /var/www/html/var/indexes
     env:
       - name: APP_ENV
         value: {{ .Values.app.app_env }}
