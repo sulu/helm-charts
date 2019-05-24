@@ -79,7 +79,7 @@ google:
 
 mysql:
     enabled: true
-    imageTag: 5.7.19
+    imageTag: 5.7
     mysqlUser: sulu
     # Secret will be recreated on upgrade
     # https://github.com/helm/charts/issues/5167

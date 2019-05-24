@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "varnish.fullname" . }}
@@ -37,23 +37,5 @@ spec:
         - name: http
           containerPort: 80
           protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: {{ .Values.readinessPath }}
-            port: http
-{{- if .Values.readinessAuthentication }}
-            httpHeaders:
-              - name: Authorization
-                value: Basic {{ .Values.readinessAuthentication|b64enc }}
-{{- end }}
-        readinessProbe:
-          httpGet:
-            path: {{ .Values.readinessPath }}
-            port: http
-{{- if .Values.readinessAuthentication }}
-            httpHeaders:
-              - name: Authorization
-                value: Basic {{ .Values.readinessAuthentication|b64enc }}
-{{- end }}
         resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.resources | indent 10 }}

@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "sulu.fullname" . }}
@@ -29,15 +29,6 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: {{ .Values.app.readinessPath }}
-              port: http
-{{- if .Values.app.readinessAuthentication }}
-              httpHeaders:
-                - name: Authorization
-                  value: Basic {{ .Values.app.readinessAuthentication|b64enc }}
-{{- end }}
           readinessProbe:
             httpGet:
               path: {{ .Values.app.readinessPath }}
