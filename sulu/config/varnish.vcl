@@ -42,6 +42,42 @@ sub vcl_recv {
 
         return (synth(200, "Banned"));
     }
+
+    // Add a Surrogate-Capability header to announce ESI support.
+    set req.http.Surrogate-Capability = "abc=ESI/1.0";
+
+    // Remove all cookies except the session ID.
+    if (req.http.Cookie) {
+        set req.http.Cookie = ";" + req.http.Cookie;
+        set req.http.Cookie = regsuball(req.http.Cookie, "; +", ";");
+        set req.http.Cookie = regsuball(req.http.Cookie, ";({{ .Values.varnish.sessionCookie }})=", "; \1=");
+        set req.http.Cookie = regsuball(req.http.Cookie, ";[^ ][^;]*", "");
+        set req.http.Cookie = regsuball(req.http.Cookie, "^[; ]+|[; ]+$", "");
+
+        if (req.http.Cookie == "") {
+            // If there are no more cookies, remove the header to get page cached.
+            unset req.http.Cookie;
+        }
+    }
+
+    if (req.method != "GET" && req.method != "HEAD") {
+        return (pass);
+    }
+
+    if (req.http.Authorization) {
+        return (pass);
+    }
+
+    # Force the lookup, the backend must tell not to cache or vary on all
+    # headers that are used to build the hash.
+    return (hash);
+}
+
+sub vcl_hash {
+    // Handle SSL offloading
+    if (req.http.X-Forwarded-Proto) {
+        hash_data(req.http.X-Forwarded-Proto);
+    }
 }
 
 sub vcl_backend_response {

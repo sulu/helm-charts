@@ -26,6 +26,7 @@ varnish:
         repository: varnish
         tag: latest
         pullPolicy: IfNotPresent
+    sessionCookie: PHPSESSID
     resources: {}
 
 app:
