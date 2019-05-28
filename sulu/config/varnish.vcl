@@ -116,6 +116,8 @@ sub vcl_deliver {
     if (!resp.http.x-cache-debug) {
         unset resp.http.x-url;
         unset resp.http.x-host;
+        unset resp.http.x-cache-tags;
+        unset resp.http.x-powered-by;
     }
 
     if (obj.hits > 0) {
