@@ -6,6 +6,9 @@ Following charts are available:
 
 * Sulu
 * Varnish
+* Elasticsearch
+* Jackrabbit
+* Mediaproxy
 
 The packages will be build inside Gitlab-CI and published in a google-bucket. Public available over
 http://charts.sulu.cloud

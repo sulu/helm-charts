@@ -2,8 +2,11 @@ lint:
     stage: lint
     image: sulu/helm-gcloud
     script:
-        - helm lint varnish
+        - helm lint elasticsearch
+        - helm lint jackrabbit
+        - helm lint mediaproxy
         - helm lint sulu
+        - helm lint varnish
 
 build:
     stage: build
@@ -17,9 +20,11 @@ build:
         - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
     script:
         # create charts
+        - helm package -d build elasticsearch
+        - helm package -d build jackrabbit
+        - helm package -d build mediaproxy
+        - cd sulu && helm dep build && cd .. && helm package -d build sulu
         - helm package -d build varnish
-        - cd sulu && helm dep build && cd ..
-        - helm package -d build sulu
         # index directory
         - helm repo index build
     after_script:
