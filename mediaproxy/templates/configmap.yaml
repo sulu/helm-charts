@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: {{ include "mediaproxy.fullname" . }}-configmap
+    labels:
+        app.kubernetes.io/name: {{ include "mediaproxy.name" . }}
+        helm.sh/chart: {{ include "mediaproxy.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+    nginx.conf: |-
+{{ $file := (.Files.Get "config/mediaproxy.conf") }}
+{{ tpl $file . | indent 8 }}

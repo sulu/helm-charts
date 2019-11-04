@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "jackrabbit.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "jackrabbit.name" . }}
+    helm.sh/chart: {{ include "jackrabbit.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  serviceName: {{ include "jackrabbit.fullname" . }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "jackrabbit.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ include "jackrabbit.fullname" . }}-data
+    spec:
+      accessModes:
+      {{- range .Values.persistence.accessModes }}
+        - {{ . | quote }}
+      {{- end }}
+      {{ include "jackrabbit.storageClass" . }}
+      resources:
+        requests:
+          storage: {{ .Values.persistence.size | quote }}
+  updateStrategy:
+    type: {{ .Values.statefulset.updateStrategy }}
+    {{- if .Values.statefulset.rollingUpdatePartition }}
+    {{- if (eq "Recreate" .Values.statefulset.updateStrategy) }}
+    rollingUpdate: null
+    {{- else }}
+    rollingUpdate:
+      partition: {{ .Values.statefulset.rollingUpdatePartition }}
+    {{- end }}
+    {{- end }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "jackrabbit.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ include "jackrabbit.fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+{{- with .Values.env }}
+{{ toYaml . | indent 8 }}
+{{- end }}
+        volumeMounts:
+        - name: {{ include "jackrabbit.fullname" . }}-data
+          mountPath: /opt/jackrabbit/repository
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
