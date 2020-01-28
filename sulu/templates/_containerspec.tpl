@@ -33,8 +33,10 @@ containers:
         value: {{ template "sulu.redis.fullname" . }}
       - name: REDIS_PASSWORD
         value: {{ .Values.redis.password | quote }}
+{{- if .Values.mysql.enabled }}
       - name: DATABASE_URL
         value: {{ template "sulu.mysql.url" . }}
+{{- end }}
 {{- if .Values.google.enabled }}
       - name: GOOGLE_STORAGE_BUCKET_NAME
         value: {{ .Values.google.bucket }}
