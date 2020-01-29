@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: {{ .Values.varnish.configmap }}
+    name: {{ .Release.Name }}-varnish-configmap
     labels:
         app: {{ template "sulu.varnish.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
