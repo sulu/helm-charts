@@ -6,8 +6,6 @@ image:
 nameOverride: ""
 fullnameOverride: ""
 
-configmap: varnish-configmap
-
 service:
     type: NodePort
     port: 80

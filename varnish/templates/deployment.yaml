@@ -20,9 +20,9 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       volumes:
-      - name: {{ .Values.configmap }}
+      - name: {{ .Release.Name }}-varnish-configmap
         configMap:
-          name: {{ .Values.configmap }}
+          name: {{ .Release.Name }}-varnish-configmap
           items:
           - key: default.vcl
             path: default.vcl
@@ -31,7 +31,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
-        - name: {{ .Values.configmap }}
+        - name: {{ .Release.Name }}-varnish-configmap
           mountPath: /etc/varnish/
         ports:
         - name: http

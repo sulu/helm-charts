@@ -18,7 +18,6 @@ ingress:
 
 varnish:
     enabled: true
-    configmap: varnish-configmap
     service:
         type: NodePort
         port: 80
