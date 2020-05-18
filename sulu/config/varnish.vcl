@@ -43,8 +43,34 @@ sub vcl_recv {
         return (synth(200, "Banned"));
     }
 
+    {{ if .Values.varnish.authorization -}}
+    # move authorization to varnish https://gist.github.com/section-io-gists/f553f548245848387feb200de709bc90
+    # enables basic-auth in front of the whole application (inclusive caching)
+    # authentication should not be required for ban/purge requests
+    if (!req.http.Authorization ~ "Basic {{ .Values.varnish.authorization|b64enc }}"
+        {{- range .Values.varnish.authorizationExcludedUserAgents -}}
+        && !req.http.User-Agent ~ {{ .|quote }}
+        {{- end -}}
+    ) {
+        # This is checking for base64 encoded username:password combination
+        return(synth(401, "Authentication required"));
+    }
+
+    unset req.http.Authorization;
+    {{- end }}
+
     // Add a Surrogate-Capability header to announce ESI support.
     set req.http.Surrogate-Capability = "abc=ESI/1.0";
+
+    {{ range .Values.varnish.vary -}}
+    set req.http.{{ .header }} = regsub(req.http.Cookie, ".*{{ .cookie }}=([^;]+).*", "\1");
+    {{ end }}
+
+    # strip away utm parameters from url https://www.getpagespeed.com/server-setup/varnish/strip-query-parameters-varnish
+    if (req.url ~ "(\?|&)(gclid|utm_[a-z]+)=") {
+        set req.url = regsuball(req.url, "(gclid|utm_[a-z]+)=[-_A-z0-9+()%.]+&?", "");
+        set req.url = regsub(req.url, "[?|&]+$", "");
+    }
 
     // Remove all cookies except the session ID.
     if (req.http.Cookie) {
@@ -81,6 +107,18 @@ sub vcl_hash {
 }
 
 sub vcl_backend_response {
+    {{ if .Values.varnish.grace -}}
+    # Enable grace period (see https://varnish-cache.org/docs/4.1/users-guide/vcl-grace.html)
+    set beresp.grace = {{ .Values.varnish.grace }};
+
+    {{ end -}}
+
+    {{ if .Values.varnish.keep -}}
+    # Enable keep period (see https://varnish-cache.org/docs/4.1/users-guide/vcl-grace.html)
+    set beresp.keep = {{ .Values.varnish.grace }};
+
+    {{ end -}}
+
     # Set ban-lurker friendly custom headers
     set beresp.http.x-url = bereq.url;
     set beresp.http.x-host = bereq.http.host;
@@ -126,3 +164,17 @@ sub vcl_deliver {
         set resp.http.X-Cache = "MISS";
     }
 }
+
+{{ if .Values.varnish.authorization -}}
+# move authorization to varnish https://gist.github.com/section-io-gists/f553f548245848387feb200de709bc90
+# enables basic-auth in front of the whole application (inclusive caching)
+sub vcl_synth {
+    if (resp.status == 401) {
+        set resp.status = 401;
+        set resp.http.WWW-Authenticate = "Basic realm={{ .Release.Name }}";
+
+        return(deliver);
+    }
+}
+
+{{ end -}}

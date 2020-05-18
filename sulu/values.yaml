@@ -26,6 +26,15 @@ varnish:
         tag: latest
         pullPolicy: IfNotPresent
     sessionCookie: PHPSESSID
+    # authorization: "user:password"
+    # authorizationExcludedUserAgents:
+    #   - GoogleHC
+    #   - Java
+    # vary: 
+    #   - cookie: "_myCookie"
+    #     header: "X-MY-VARY-HEADER"
+    # grace: "10m"
+    # keep: "1m"
     resources: {}
 
 app:

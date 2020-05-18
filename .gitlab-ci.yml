@@ -1,6 +1,6 @@
 lint:
     stage: lint
-    image: sulu/helm-gcloud
+    image: sulu/helm-gcloud:2.13.1-buster
     script:
         - helm lint elasticsearch
         - helm lint jackrabbit
@@ -10,7 +10,7 @@ lint:
 
 build:
     stage: build
-    image: sulu/helm-gcloud
+    image: sulu/helm-gcloud:2.13.1-buster
     before_script:
         # authenticate gcloud
         - echo "$SERVICE_ACCOUNT_KEY" > key.json
