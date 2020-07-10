@@ -2,11 +2,15 @@ dependencies:
     - name: mysql
       version: 1.1.x
       repository: https://kubernetes-charts.storage.googleapis.com/
-      condition: mysql.enabled
+      # allow to disable via sulu.mysql.enabled in helm 2 by adding explicit condition
+      # https://github.com/helm/helm/issues/4490
+      condition: sulu.mysql.enabled, mysql.enabled
     - name: redis
       version: 10.3.x
       repository: https://kubernetes-charts.storage.googleapis.com/
     - name: varnish
       version: 1.2.x
       repository: "file://../varnish"
-      condition: varnish.enabled
+      # allow to disable via sulu.mysql.enabled in helm 2 by adding explicit condition
+      # https://github.com/helm/helm/issues/4490
+      condition: sulu.varnish.enabled, varnish.enabled
