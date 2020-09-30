@@ -1,6 +1,6 @@
 image:
     repository: nginx
-    tag: 1.16
+    tag: 1.18
     pullPolicy: IfNotPresent
 
 nameOverride: ""
