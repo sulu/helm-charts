@@ -3,6 +3,14 @@ imagePullSecrets:
   - name: {{ .Values.app.image.pullSecrets }}
 {{- end }}
 volumes:
+{{- if .Values.app.phpConfig.enabled }}
+  - name: php-config
+    configMap:
+      name: {{ .Release.Name }}-php-configmap
+      items:
+        - key: custom.ini
+          path: custom.ini
+{{- end }}
 {{- if .Values.google.enabled }}
   - name: google-bucket-config
     configMap:
@@ -16,6 +24,10 @@ containers:
     image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
     imagePullPolicy: {{ .Values.app.image.pullPolicy }}
     volumeMounts:
+{{- if .Values.app.phpConfig.enabled }}
+      - name: php-config
+        mountPath: /usr/local/etc/php/conf.d
+{{- end }}
 {{- if .Values.google.enabled }}
       - name: google-bucket-config
         mountPath: /etc/google

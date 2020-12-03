@@ -30,7 +30,7 @@ varnish:
     # authorizationExcludedUserAgents:
     #   - GoogleHC
     #   - Java
-    # vary: 
+    # vary:
     #   - cookie: "_myCookie"
     #     header: "X-MY-VARY-HEADER"
     # grace: "10m"
@@ -75,6 +75,8 @@ app:
         postUpgrade:
             enabled: false
             command: ["/var/www/html/bin/adminconsole", "doctrine:migrations:migrate"]
+    phpConfig:
+        enabled: true
 
 google:
     enabled: false

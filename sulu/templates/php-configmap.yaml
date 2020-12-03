@@ -1,0 +1,15 @@
+{{- if .Values.app.phpConfig.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: {{ .Release.Name }}-php-configmap
+    labels:
+        app: {{ template "sulu.fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+data:
+    custom.ini: |-
+{{ $file := (.Files.Get "config/php.ini") }}
+{{ tpl $file . | indent 8 }}
+{{- end }}
