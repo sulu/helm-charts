@@ -77,16 +77,15 @@ app:
             command: ["/var/www/html/bin/adminconsole", "doctrine:migrations:migrate"]
     phpConfig:
         enabled: true
-
-google:
-    enabled: false
-    bucket: ''
-    project_id: ''
-    private_key_id: ''
-    private_key: ''
-    client_email: ''
-    client_id: ''
-    client_x509_cert_url: ''
+    google:
+        enabled: false
+        bucket: ''
+        project_id: ''
+        private_key_id: ''
+        private_key: ''
+        client_email: ''
+        client_id: ''
+        client_x509_cert_url: ''
 
 mysql:
     enabled: true
