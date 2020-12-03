@@ -2,12 +2,14 @@ apiVersion: v1
 appVersion: "^2.0"
 description: A Helm chart for a Sulu-Application
 name: sulu
-version: 1.4.1
+version: 1.5.0
 home: https://sulu.io
 sources:
     - https://github.com/sulu/skeleton
 maintainers:
     - name: 'Johannes Wachter'
       email: johannes@sulu.io
+    - name: 'Niklas Natter'
+      email: niklas@sulu.io
     - name: 'Thomas Schedler'
       email: thomas@sulu.io
