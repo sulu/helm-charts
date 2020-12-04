@@ -1,6 +1,6 @@
 lint:
     stage: lint
-    image: sulu/helm-gcloud:2.13.1-buster
+    image: alpine/helm:3.4.1
     script:
         - helm lint elasticsearch
         - helm lint jackrabbit
