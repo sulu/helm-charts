@@ -26,7 +26,8 @@ containers:
     volumeMounts:
 {{- if .Values.app.phpConfig.enabled }}
       - name: php-config
-        mountPath: /usr/local/etc/php/conf.d
+        mountPath: /usr/local/etc/php/conf.d/custom.ini
+        subPath: custom.ini
 {{- end }}
 {{- if .Values.app.google.enabled }}
       - name: google-bucket-config
