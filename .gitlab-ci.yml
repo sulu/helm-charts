@@ -1,6 +1,6 @@
 lint:
     stage: lint
-    image: dtzar/helm-kubectl:3.4.1
+    image: dtzar/helm-kubectl:3.4.0
     script:
         - helm lint elasticsearch
         - helm lint jackrabbit
