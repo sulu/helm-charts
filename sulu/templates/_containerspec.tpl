@@ -3,7 +3,15 @@ imagePullSecrets:
   - name: {{ .Values.app.image.pullSecrets }}
 {{- end }}
 volumes:
-{{- if .Values.google.enabled }}
+{{- if .Values.app.phpConfig.enabled }}
+  - name: php-config
+    configMap:
+      name: {{ .Release.Name }}-php-configmap
+      items:
+        - key: custom.ini
+          path: custom.ini
+{{- end }}
+{{- if .Values.app.google.enabled }}
   - name: google-bucket-config
     configMap:
       name: {{ template "sulu.fullname" . }}-google-config
@@ -16,7 +24,11 @@ containers:
     image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
     imagePullPolicy: {{ .Values.app.image.pullPolicy }}
     volumeMounts:
-{{- if .Values.google.enabled }}
+{{- if .Values.app.phpConfig.enabled }}
+      - name: php-config
+        mountPath: /usr/local/etc/php/conf.d
+{{- end }}
+{{- if .Values.app.google.enabled }}
       - name: google-bucket-config
         mountPath: /etc/google
 {{- end }}
@@ -37,9 +49,9 @@ containers:
       - name: DATABASE_URL
         value: {{ template "sulu.mysql.url" . }}
 {{- end }}
-{{- if .Values.google.enabled }}
+{{- if .Values.app.google.enabled }}
       - name: GOOGLE_STORAGE_BUCKET_NAME
-        value: {{ .Values.google.bucket }}
+        value: {{ .Values.app.google.bucket }}
       - name: GOOGLE_STORAGE_KEY_FILE
         value: /etc/google/key.json
 {{- end }}

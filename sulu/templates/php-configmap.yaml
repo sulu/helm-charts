@@ -1,15 +1,15 @@
-{{- if .Values.app.google.enabled }}
+{{- if .Values.app.phpConfig.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: {{ template "sulu.fullname" . }}-google-config
+    name: {{ .Release.Name }}-php-configmap
     labels:
         app: {{ template "sulu.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
 data:
-    key.json: |-
-{{ $file := (.Files.Get "config/google-key.json") }}
+    custom.ini: |-
+{{ $file := (.Files.Get "config/php.ini") }}
 {{ tpl $file . | indent 8 }}
 {{- end }}
