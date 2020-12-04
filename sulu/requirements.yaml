@@ -1,7 +1,7 @@
 dependencies:
     - name: mysql
-      version: 1.6.x
-      repository: https://kubernetes-charts.storage.googleapis.com/
+      version: 0.1.x
+      repository: https://storage.googleapis.com/t3n-helm-charts
       condition: mysql.enabled
     - name: redis
       version: 10.3.x
