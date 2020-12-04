@@ -22,6 +22,10 @@
     {{- end -}}
 {{- end -}}
 
+{{- define "sulu.taskrunner.fullname" -}}
+    {{- printf "%s-%s" .Release.Name "taskrunner" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{/* Create chart name and version as used by the chart label. */}}
 {{- define "sulu.chart" -}}
     {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
