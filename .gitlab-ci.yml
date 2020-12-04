@@ -18,6 +18,7 @@ build:
         # download available chart packages
         - mkdir build
         - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
+        - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
     script:
         # create charts
         - helm package -d build elasticsearch
