@@ -35,18 +35,6 @@
     Create a default fully qualified app name.
     We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "sulu.mysql.fullname" -}}
-    {{- printf "%s-%s" .Release.Name "mysql" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "sulu.mysql.url" -}}
-    {{- printf "mysql://%s:%s@%s:3306/%s" (.Values.mysql.mysqlUser) (.Values.mysql.mysqlPassword) (printf "%s-%s" .Release.Name "mysql" | trunc 63 | trimSuffix "-") (.Values.mysql.mysqlDatabase) -}}
-{{- end -}}
-
-{{/*
-    Create a default fully qualified app name.
-    We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
 {{- define "sulu.redis.fullname" -}}
     {{- printf "%s-%s" .Release.Name "redis-master" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

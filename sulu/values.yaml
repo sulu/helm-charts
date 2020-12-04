@@ -96,19 +96,6 @@ taskrunner:
     affinity: {}
     annotations: {}
 
-mysql:
-    enabled: true
-    imageTag: 5.7
-    mysqlUser: sulu
-    # Secret will be recreated on upgrade
-    # https://github.com/helm/charts/issues/5167
-    mysqlPassword: sulu
-    mysqlDatabase: sulu
-    persistence:
-        enabled: true
-        accessMode: ReadWriteOnce
-        size: 8Gi
-
 redis:
     # Secret will be recreated on upgrade
     # https://github.com/helm/charts/issues/5167
