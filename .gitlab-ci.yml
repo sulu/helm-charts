@@ -60,6 +60,8 @@ build-helm:
         - helm package -d build varnish
         # index directory
         - helm repo index build
+        # test kubectl
+        - kubectl version
     after_script:
         # upload new packaged charts
         # - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
@@ -69,7 +71,7 @@ build-gcloud:
     image: google/cloud-sdk
     before_script:
         # install helm
-        - curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        - curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -s -- --version 3.4.0
         # authenticate gcloud
         - echo "$SERVICE_ACCOUNT_KEY" > key.json
         - gcloud auth activate-service-account --key-file=key.json
@@ -86,6 +88,8 @@ build-gcloud:
         - helm package -d build varnish
         # index directory
         - helm repo index build
+        # test kubectl
+        - kubectl version
     after_script:
         # upload new packaged charts
         # - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
