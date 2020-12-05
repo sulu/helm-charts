@@ -7,8 +7,16 @@ lint:
         - helm lint mediaproxy
         - helm lint sulu
         - helm lint varnish
-    only:
-        - master
+
+lint-alpine:
+    stage: lint
+    image: alpine/helm:3.4.0
+    script:
+        - helm lint elasticsearch
+        - helm lint jackrabbit
+        - helm lint mediaproxy
+        - helm lint sulu
+        - helm lint varnish
 
 build:
     stage: lint
