@@ -42,7 +42,8 @@ build-helm:
     before_script:
         # install gcloud
         - apk add --update --no-cache python3
-        - curl -sSL https://sdk.cloud.google.com | bash
+        - curl -sSL https://sdk.cloud.google.com | bash -s -- --install-dir=/usr/local/bin
+        - ls -al /usr/local/bin
         - ls -al /root/google-cloud-sdk
         - ls -al /root/google-cloud-sdk/bin
         - ls -al ~ 
