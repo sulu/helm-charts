@@ -7,6 +7,8 @@ lint:
         - helm lint mediaproxy
         - helm lint sulu
         - helm lint varnish
+    only:
+        - master
 
 build:
     stage: lint
@@ -31,8 +33,8 @@ build:
     after_script:
         # upload new packaged charts
         # - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
-#    only:
-#        - master
+    only:
+        - master
 
 build-helm:
     stage: lint
@@ -41,6 +43,9 @@ build-helm:
         # install gcloud
         - apk add --update --no-cache python3
         - curl -sSL https://sdk.cloud.google.com | bash
+        - ls -al /root/google-cloud-sdk
+        - ls -al /root/google-cloud-sdk/bin
+        - ls -al ~ 
         # authenticate gcloud
         - echo "$SERVICE_ACCOUNT_KEY" > key.json
         - gcloud auth activate-service-account --key-file=key.json
