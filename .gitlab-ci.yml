@@ -24,7 +24,7 @@ lint-alpine:
 lint-kubectl:
     stage: lint
     image: 
-        name: d3fk/kubectl
+        name: boxboat/kubectl
         entrypoint: [""]
     variables:
         HELM_SCRIPT_URL: https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
