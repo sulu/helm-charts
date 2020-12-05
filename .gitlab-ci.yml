@@ -19,6 +19,7 @@ lint-alpine:
         - helm lint mediaproxy
         - helm lint sulu
         - helm lint varnish
+        - kubectl version
 
 build:
     stage: lint
