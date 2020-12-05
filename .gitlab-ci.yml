@@ -9,7 +9,7 @@ lint:
         - helm lint varnish
 
 build:
-    stage: build
+    stage: lint
     image: sulu/helm-gcloud:2.13.1-buster
     before_script:
         # authenticate gcloud
@@ -33,6 +33,58 @@ build:
         - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
 #    only:
 #        - master
+
+build-helm:
+    stage: lint
+    image: dtzar/helm-kubectl:3.4.0
+    before_script:
+        # install gcloud
+        - curl -sSL https://sdk.cloud.google.com | bash
+        # authenticate gcloud
+        - echo "$SERVICE_ACCOUNT_KEY" > key.json
+        - gcloud auth activate-service-account --key-file=key.json
+        # download available chart packages
+        - mkdir build
+        - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
+        - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
+    script:
+        # create charts
+        - helm package -d build elasticsearch
+        - helm package -d build jackrabbit
+        - helm package -d build mediaproxy
+        - cd sulu && helm dep build && cd .. && helm package -d build sulu
+        - helm package -d build varnish
+        # index directory
+        - helm repo index build
+    after_script:
+        # upload new packaged charts
+        - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
+
+build-gcloud:
+    stage: lint
+    image: google/cloud-sdk
+    before_script:
+        # install helm
+        - curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        # authenticate gcloud
+        - echo "$SERVICE_ACCOUNT_KEY" > key.json
+        - gcloud auth activate-service-account --key-file=key.json
+        # download available chart packages
+        - mkdir build
+        - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
+        - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
+    script:
+        # create charts
+        - helm package -d build elasticsearch
+        - helm package -d build jackrabbit
+        - helm package -d build mediaproxy
+        - cd sulu && helm dep build && cd .. && helm package -d build sulu
+        - helm package -d build varnish
+        # index directory
+        - helm repo index build
+    after_script:
+        # upload new packaged charts
+        - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
 
 stages:
     - lint
