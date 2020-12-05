@@ -30,7 +30,7 @@ lint-kubectl:
         HELM_SCRIPT_URL: https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
     before_script:
         # install helm
-        - curl -sSL "$HELM_SCRIPT_URL" | bash -s -- --version v3.4.0
+        - curl -sSL "$HELM_SCRIPT_URL" | sh -s -- --version v3.4.0
     script:
         - helm lint elasticsearch
         - helm lint jackrabbit
