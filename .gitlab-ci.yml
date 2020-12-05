@@ -21,24 +21,6 @@ lint-alpine:
         - helm lint varnish
         - kubectl version
 
-lint-kubectl:
-    stage: lint
-    image: 
-        name: d3fk/kubectl
-        entrypoint: [""]
-    variables:
-        HELM_SCRIPT_URL: https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-    before_script:
-        # install helm
-        - curl -sSL "$HELM_SCRIPT_URL" | sh -s -- --version v3.4.0
-    script:
-        - helm lint elasticsearch
-        - helm lint jackrabbit
-        - helm lint mediaproxy
-        - helm lint sulu
-        - helm lint varnish
-        - kubectl version
-
 build-helm:
     stage: lint
     image: dtzar/helm-kubectl:3.4.0
