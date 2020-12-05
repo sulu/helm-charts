@@ -10,8 +10,9 @@ lint:
 
 lint-alpine:
     stage: lint
-    image: alpine/helm:3.4.0
-    entrypoint: [""]
+    image: 
+        name: alpine/helm:3.4.0
+        entrypoint: [""]
     script:
         - helm lint elasticsearch
         - helm lint jackrabbit
