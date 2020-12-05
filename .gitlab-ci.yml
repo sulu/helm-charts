@@ -39,7 +39,7 @@ build-helm:
     image: dtzar/helm-kubectl:3.4.0
     before_script:
         # install gcloud
-        - apk add --update --no-cache python
+        - apk add --update --no-cache python3
         - curl -sSL https://sdk.cloud.google.com | bash
         # authenticate gcloud
         - echo "$SERVICE_ACCOUNT_KEY" > key.json
