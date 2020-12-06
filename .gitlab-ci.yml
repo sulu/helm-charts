@@ -11,36 +11,8 @@ lint:
         - helm lint sulu
         - helm lint varnish
 
-build-helm:
-    stage: lint
-    image: dtzar/helm-kubectl:$HELM_VERSION
-    before_script:
-        # install gcloud
-        - apk add --update --no-cache python3
-        - curl -sSL https://sdk.cloud.google.com | bash
-        - export PATH=$PATH:/root/google-cloud-sdk/bin
-        # authenticate gcloud
-        - echo "$SERVICE_ACCOUNT_KEY" > key.json
-        - gcloud auth activate-service-account --key-file=key.json
-        # download available chart packages
-        - mkdir build
-        - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
-        - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
-    script:
-        # create charts
-        - helm package -d build elasticsearch
-        - helm package -d build jackrabbit
-        - helm package -d build mediaproxy
-        - cd sulu && helm dep build && cd .. && helm package -d build sulu
-        - helm package -d build varnish
-        # index directory
-        - helm repo index build
-    after_script:
-        # upload new packaged charts
-        # - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
-
 build-gcloud-slim:
-    stage: lint
+    stage: build
     image: google/cloud-sdk:slim
     before_script:
         # install helm
@@ -64,7 +36,9 @@ build-gcloud-slim:
         - helm repo index build
     after_script:
         # upload new packaged charts
-        # - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
+        - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
+    only:
+        - master
 
 stages:
     - lint
