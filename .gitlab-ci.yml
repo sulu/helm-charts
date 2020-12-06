@@ -37,8 +37,8 @@ build:
     after_script:
         # upload new packaged charts
         - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
-    #only:
-    #    - master
+    only:
+        - master
 
 stages:
     - lint
