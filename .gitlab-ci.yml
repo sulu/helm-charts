@@ -11,7 +11,7 @@ lint:
         - helm lint sulu
         - helm lint varnish
 
-build-gcloud-slim:
+build:
     stage: build
     image: google/cloud-sdk:slim
     before_script:
