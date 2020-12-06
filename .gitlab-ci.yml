@@ -1,6 +1,9 @@
+variables:
+    HELM_VERSION: 3.4.0
+
 lint:
     stage: lint
-    image: sulu/helm-gcloud:2.13.1-buster
+    image: dtzar/helm-kubectl:$HELM_VERSION
     script:
         - helm lint elasticsearch
         - helm lint jackrabbit
@@ -10,8 +13,11 @@ lint:
 
 build:
     stage: build
-    image: sulu/helm-gcloud:2.13.1-buster
+    image: google/cloud-sdk:slim
     before_script:
+        # install helm
+        - HELM_SCRIPT_URL=https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+        - curl -sSL "$HELM_SCRIPT_URL" | bash -s -- --version "v$HELM_VERSION"
         # authenticate gcloud
         - echo "$SERVICE_ACCOUNT_KEY" > key.json
         - gcloud auth activate-service-account --key-file=key.json
