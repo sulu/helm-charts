@@ -1,6 +1,9 @@
-lint-dtzar:
+variables:
+    HELM_VERSION: 3.4.0
+
+lint:
     stage: lint
-    image: dtzar/helm-kubectl:3.4.0
+    image: dtzar/helm-kubectl:$HELM_VERSION
     script:
         - helm lint elasticsearch
         - helm lint jackrabbit
@@ -8,55 +11,13 @@ lint-dtzar:
         - helm lint sulu
         - helm lint varnish
 
-lint-alpine:
-    stage: lint
-    image: 
-        name: alpine/helm:3.4.0
-        entrypoint: [""]
-    script:
-        - helm lint elasticsearch
-        - helm lint jackrabbit
-        - helm lint mediaproxy
-        - helm lint sulu
-        - helm lint varnish
-        - kubectl version
-
-build-helm:
-    stage: lint
-    image: dtzar/helm-kubectl:3.4.0
-    before_script:
-        # install gcloud
-        - apk add --update --no-cache python3
-        - curl -sSL https://sdk.cloud.google.com | bash
-        - export PATH=$PATH:/root/google-cloud-sdk/bin
-        # authenticate gcloud
-        - echo "$SERVICE_ACCOUNT_KEY" > key.json
-        - gcloud auth activate-service-account --key-file=key.json
-        # download available chart packages
-        - mkdir build
-        - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
-        - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
-    script:
-        # create charts
-        - helm package -d build elasticsearch
-        - helm package -d build jackrabbit
-        - helm package -d build mediaproxy
-        - cd sulu && helm dep build && cd .. && helm package -d build sulu
-        - helm package -d build varnish
-        # index directory
-        - helm repo index build
-    after_script:
-        # upload new packaged charts
-        # - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
-
-build-gcloud:
+build:
     stage: lint
     image: google/cloud-sdk
-    variables:
-        HELM_SCRIPT_URL: https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
     before_script:
         # install helm
-        - curl -sSL "$HELM_SCRIPT_URL" | bash -s -- --version v3.4.0
+        - HELM_SCRIPT_URL=https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+        - curl -sSL "$HELM_SCRIPT_URL" | bash -s -- --version "v$HELM_VERSION"
         # authenticate gcloud
         - echo "$SERVICE_ACCOUNT_KEY" > key.json
         - gcloud auth activate-service-account --key-file=key.json
