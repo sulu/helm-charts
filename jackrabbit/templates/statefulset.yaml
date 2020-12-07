@@ -51,7 +51,7 @@ spec:
 {{- end }}
         volumeMounts:
         - name: {{ include "jackrabbit.fullname" . }}-data
-          mountPath: /opt/jackrabbit/repository
+          mountPath: {{ .Values.persistence.path }}
         ports:
         - name: http
           containerPort: 8080
