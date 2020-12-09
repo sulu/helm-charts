@@ -20,6 +20,12 @@ spec:
                     backend:
                         serviceName: {{ include "sulu.fullname" . }}
                         servicePort: http
+{{- if .Values.mediaproxy.enabled }}
+                  - path: {{ .Values.ingress.paths.mediaproxy }}
+                    backend:
+                        serviceName: {{ include "sulu.mediaproxy.fullname" . }}
+                        servicePort: http
+{{- end }}
                   - path: {{ .Values.ingress.paths.website }}
                     backend:
                         serviceName: {{ include "sulu.varnish.fullname" . }}

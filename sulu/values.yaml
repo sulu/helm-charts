@@ -14,7 +14,12 @@ ingress:
         host: ''
     paths:
         admin: '/admin/*'
+        mediaproxy: '/uploads/media/*'
         website: '/*'
+
+# invalidation of cached medias on deletion is not implemented yet
+mediaproxy:
+    enabled: false
 
 varnish:
     enabled: true
