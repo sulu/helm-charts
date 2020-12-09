@@ -1,6 +1,6 @@
 image:
     repository: sulu/jackrabbit
-    tag: 2.18
+    tag: 2.20
     pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -36,7 +36,7 @@ statefulset:
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
     # rollingUpdatePartition:
-    readinessProbePath: /
+    readinessProbePath: /server
 
 ## Resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
