@@ -36,6 +36,7 @@ statefulset:
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
     # rollingUpdatePartition:
+    readinessProbePath: /
 
 ## Resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
