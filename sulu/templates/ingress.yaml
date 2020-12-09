@@ -19,17 +19,17 @@ spec:
               paths:
                   - path: {{ $.Values.ingress.paths.admin }}
                     backend:
-                        serviceName: {{ include "sulu.fullname" . }}
+                        serviceName: {{ include "sulu.fullname" $ }}
                         servicePort: http
 {{- if $.Values.mediaproxy.enabled }}
                   - path: {{ $.Values.ingress.paths.mediaproxy }}
                     backend:
-                        serviceName: {{ include "sulu.mediaproxy.fullname" . }}
+                        serviceName: {{ include "sulu.mediaproxy.fullname" $ }}
                         servicePort: http
 {{- end }}
                   - path: {{ $.Values.ingress.paths.website }}
                     backend:
-                        serviceName: {{ include "sulu.varnish.fullname" . }}
+                        serviceName: {{ include "sulu.varnish.fullname" $ }}
                         servicePort: http
           host: {{ . }}
 {{- end }}
