@@ -11,7 +11,7 @@ ingress:
     tls:
         enabled: false
         secretName: ''
-        host: ''
+        hosts: []
     paths:
         admin: '/admin/*'
         mediaproxy: '/uploads/media/*'
