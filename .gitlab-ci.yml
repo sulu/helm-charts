@@ -30,7 +30,7 @@ build:
         - helm package -d build elasticsearch
         - helm package -d build jackrabbit
         - helm package -d build mediaproxy
-        - cd sulu && helm dep build && cd .. && helm package -d build sulu
+        - helm dependency build sulu && helm package -d build sulu
         - helm package -d build varnish
         # index directory
         - helm repo index build
