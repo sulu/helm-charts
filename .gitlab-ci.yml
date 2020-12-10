@@ -8,7 +8,7 @@ lint:
         - helm lint elasticsearch
         - helm lint jackrabbit
         - helm lint mediaproxy
-        - helm lint sulu
+        - helm dependency build sulu && helm lint sulu
         - helm lint varnish
 
 build:
