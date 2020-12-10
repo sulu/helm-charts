@@ -5,11 +5,11 @@ lint:
     stage: lint
     image: dtzar/helm-kubectl:$HELM_VERSION
     script:
-        - helm lint elasticsearch
-        - helm lint jackrabbit
-        - helm lint mediaproxy
+        - helm dependency build elasticsearch && helm lint elasticsearch
+        - helm dependency build jackrabbit && helm lint jackrabbit
+        - helm dependency build mediaproxy && helm lint mediaproxy
         - helm dependency build sulu && helm lint sulu
-        - helm lint varnish
+        - helm dependency build varnish && helm lint varnish
 
 build:
     stage: build
@@ -27,11 +27,11 @@ build:
         - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
     script:
         # create charts
-        - helm package -d build elasticsearch
-        - helm package -d build jackrabbit
-        - helm package -d build mediaproxy
+        - helm dependency build elasticsearch && helm package -d build elasticsearch
+        - helm dependency build jackrabbit && helm package -d build jackrabbit
+        - helm dependency build mediaproxy && helm package -d build mediaproxy
         - helm dependency build sulu && helm package -d build sulu
-        - helm package -d build varnish
+        - helm dependency build varnish && helm package -d build varnish
         # index directory
         - helm repo index build
     after_script:
