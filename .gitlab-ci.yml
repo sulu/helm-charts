@@ -4,8 +4,6 @@ variables:
 lint:
     stage: lint
     image: dtzar/helm-kubectl:$HELM_VERSION
-    before_script:
-        - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
     script:
         - helm dependency build elasticsearch && helm lint elasticsearch
         - helm dependency build jackrabbit && helm lint jackrabbit
@@ -26,7 +24,7 @@ build:
         # download available chart packages
         - mkdir build
         - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
-        - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
+        # - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
     script:
         # create charts
         - helm dependency build elasticsearch && helm package -d build elasticsearch
