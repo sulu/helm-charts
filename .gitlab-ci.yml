@@ -21,22 +21,20 @@ build:
         # authenticate gcloud
         - echo "$SERVICE_ACCOUNT_KEY" > key.json
         - gcloud auth activate-service-account --key-file=key.json
-        # download available chart packages
+    script:
+        # download existing charts
         - mkdir build
         - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
-        # - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
-    script:
-        # create charts
+        # package new charts
         - helm dependency build elasticsearch && helm package -d build elasticsearch
         - helm dependency build jackrabbit && helm package -d build jackrabbit
         - helm dependency build mediaproxy && helm package -d build mediaproxy
         - helm dependency build sulu && helm package -d build sulu
         - helm dependency build varnish && helm package -d build varnish
-        # index directory
+        # index charts directory
         - helm repo index build
-    after_script:
-        # upload new packaged charts
-        - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
+        # upload updated charts and index
+        - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/        
     only:
         - master
 
