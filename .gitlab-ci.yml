@@ -4,6 +4,8 @@ variables:
 lint:
     stage: lint
     image: dtzar/helm-kubectl:$HELM_VERSION
+    before_script:
+        - helm repo add t3n https://storage.googleapis.com/t3n-helm-charts
     script:
         - helm dependency build elasticsearch && helm lint elasticsearch
         - helm dependency build jackrabbit && helm lint jackrabbit
