@@ -9,6 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   serviceName: {{ include "elasticsearch.fullname" . }}
+  replicas: {{ .Values.statefulset.replicas }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "elasticsearch.name" . }}
@@ -54,7 +55,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: ES_JAVA_OPTS
-          value: "-Xms512m -Xmx512m"
+          value: "-Xms{{ .Values.statefulset.heapSize.min }} -Xmx{{ .Values.statefulset.heapSize.max }}"
         - name: discovery.type
           value: "single-node"
         - name: xpack.security.enabled
