@@ -32,6 +32,10 @@ persistence:
 ##
 statefulset:
     updateStrategy: RollingUpdate
+    replicas: 1
+    heapSize:
+        min: 512m
+        max: 512m
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
     # rollingUpdatePartition:
