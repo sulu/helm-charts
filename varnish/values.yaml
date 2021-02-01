@@ -2,7 +2,7 @@ image:
     repository: varnish
     tag: 6.5.1
     pullPolicy: IfNotPresent
-    args: ["-p", "vcc_allow_inline_c=on"]
+    args: ["-p", '"vcc_allow_inline_c=on"']
 
 nameOverride: ""
 fullnameOverride: ""
