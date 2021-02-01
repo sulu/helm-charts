@@ -11,6 +11,6 @@ dependencies:
       repository: "file://../varnish"
       condition: varnish.enabled
     - name: mediaproxy
-      version: 1.2.x
+      version: 1.0.x
       repository: "file://../mediaproxy"
       condition: mediaproxy.enabled

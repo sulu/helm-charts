@@ -1,6 +1,6 @@
 image:
     repository: sulu/varnish
-    tag: latest
+    tag: 0.2.0
     pullPolicy: IfNotPresent
 
 nameOverride: ""
