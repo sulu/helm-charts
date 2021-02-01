@@ -30,7 +30,10 @@ spec:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args: {{ .Values.image.args }}
+        args:
+        {{- range .Values.image.args }}
+          - {{ . | quote }}
+        {{- end }}
         env:
         - name: VARNISH_SIZE
           value: {{ .Values.deployment.varnishSize }}
