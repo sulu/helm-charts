@@ -26,10 +26,6 @@ varnish:
     service:
         type: NodePort
         port: 80
-    image:
-        repository: varnish
-        tag: latest
-        pullPolicy: IfNotPresent
     sessionCookie: PHPSESSID
     # authorization: "user:password"
     # authorizationExcludedUserAgents:
