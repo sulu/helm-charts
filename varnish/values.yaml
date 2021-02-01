@@ -1,7 +1,8 @@
 image:
-    repository: sulu/varnish
-    tag: 0.2.0
+    repository: varnish
+    tag: 6.5.1
     pullPolicy: IfNotPresent
+    args: ["-p, "vcc_allow_inline_c=on""]
 
 nameOverride: ""
 fullnameOverride: ""
@@ -9,6 +10,9 @@ fullnameOverride: ""
 service:
     type: NodePort
     port: 80
+
+deployment:
+    varnishSize: 1G
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
