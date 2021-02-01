@@ -30,6 +30,12 @@ spec:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: VARNISH_SIZE
+          value: {{ .Values.deployment.varnishSize }}
+{{- with .Values.env }}
+{{ toYaml . | indent 8 }}
+{{- end }}
         volumeMounts:
         - name: {{ .Release.Name }}-varnish-configmap
           mountPath: /etc/varnish/
