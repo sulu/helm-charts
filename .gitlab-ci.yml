@@ -8,7 +8,7 @@ lint:
         - helm dependency build elasticsearch && helm lint elasticsearch --strict
         - helm dependency build jackrabbit && helm lint jackrabbit --strict
         - helm dependency build mediaproxy && helm lint mediaproxy --strict
-        - helm dependency build sulu && helm lint sulu --strict
+        - helm dependency update sulu && helm lint sulu --strict
         - cd sulu && helm dep list && cd ..
         - helm dependency build varnish && helm lint varnish --strict
 
