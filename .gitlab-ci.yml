@@ -5,11 +5,11 @@ lint:
     stage: lint
     image: dtzar/helm-kubectl:$HELM_VERSION
     script:
-        - helm dependency build elasticsearch && helm lint elasticsearch --strict
-        - helm dependency build jackrabbit && helm lint jackrabbit --strict
-        - helm dependency build mediaproxy && helm lint mediaproxy --strict
-        - helm dependency build sulu && helm lint sulu --strict
-        - helm dependency build varnish && helm lint varnish --strict
+        - helm dependency build elasticsearch && helm dependency list elasticsearch && helm lint elasticsearch --strict
+        - helm dependency build jackrabbit && helm dependency list jackrabbit && helm lint jackrabbit --strict
+        - helm dependency build mediaproxy && helm dependency list mediaproxy && helm lint mediaproxy --strict
+        - helm dependency build sulu && helm dependency list sulu && helm lint sulu --strict
+        - helm dependency build varnish && helm dependency list varnish && helm lint varnish --strict
 
 build:
     stage: build
