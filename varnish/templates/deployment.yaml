@@ -31,9 +31,9 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
-        {{- range .Values.image.args }}
-          - {{ . | quote }}
-        {{- end }}
+{{- with .Values.image.args }}
+{{ toYaml . | indent 10 }}
+{{- end }}
         env:
         - name: VARNISH_SIZE
           value: {{ .Values.deployment.varnishSize }}
