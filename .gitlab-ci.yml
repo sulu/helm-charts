@@ -26,11 +26,11 @@ build:
         - mkdir build
         - gsutil cp -r gs://charts.sulu.cloud/* build/ || true
         # package new charts
-        - helm dependency build elasticsearch && helm package -d build elasticsearch
-        - helm dependency build jackrabbit && helm package -d build jackrabbit
-        - helm dependency build mediaproxy && helm package -d build mediaproxy
-        - helm dependency build sulu && helm package -d build sulu
-        - helm dependency build varnish && helm package -d build varnish
+        - helm dependency build elasticsearch && helm package --destination build elasticsearch
+        - helm dependency build jackrabbit && helm package --destination build jackrabbit
+        - helm dependency build mediaproxy && helm package --destination build mediaproxy
+        - helm dependency build sulu && helm package --destination build sulu
+        - helm dependency build varnish && helm package --destination build varnish
         # index charts directory
         - helm repo index build
         # upload updated charts and index
