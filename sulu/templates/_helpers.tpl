@@ -56,6 +56,10 @@
     {{- printf "%s-%s" .Release.Name "redis-master" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{- define "sulu.redis.dsn" -}}
+    {{- printf "redis://%s@%s:6379" .Values.redis.password (include "sulu.redis.fullname" .) -}}
+{{- end -}}
+
 {{/*
     Create a default fully qualified app name.
     We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).

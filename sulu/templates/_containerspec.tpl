@@ -52,7 +52,7 @@ containers:
       - name: REDIS_PASSWORD
         value: {{ .Values.redis.password | quote }}
       - name: REDIS_DSN
-        value: "redis://{{ .Values.redis.password }}@{{ template "sulu.redis.fullname" . }}:6379"
+        value: {{ (include "sulu.redis.dsn" .) | quote }}
 {{- if .Values.mysql.enabled }}
       - name: DATABASE_URL
         value: {{ template "sulu.mysql.url" . }}

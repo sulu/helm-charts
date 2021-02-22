@@ -5,7 +5,7 @@ metadata:
     name: {{ include "sulu.fullname" . }}-ingress
     labels:
         app.kubernetes.io/name: {{ include "sulu.name" . }}
-        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        helm.sh/chart: {{ include "sulu.chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}

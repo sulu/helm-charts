@@ -5,7 +5,7 @@ metadata:
     name: {{ .Release.Name }}-varnish-configmap
     labels:
         app: {{ template "sulu.varnish.fullname" . }}
-        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        helm.sh/chart: {{ include "sulu.chart" . }}
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
 data:
