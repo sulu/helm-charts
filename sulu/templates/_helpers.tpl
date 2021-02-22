@@ -1,7 +1,12 @@
 {{/* vim: set filetype=mustache: */}}
 {{/* Expand the name of the chart. */}}
+{{/* Fallback to hard coded name if the container spec is used there is no ".Chart" variable. */}}
 {{- define "sulu.name" -}}
-    {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+    {{- if .Values.nameOverride -}}
+        {{- .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+         {{- .Chart.Name | trunc 63 | trimSuffix "-" -}}
+    {{- end -}}
 {{- end -}}
 
 {{/*
@@ -65,4 +70,14 @@
 */}}
 {{- define "sulu.mediaproxy.fullname" -}}
     {{- printf "%s-%s" .Release.Name "mediaproxy" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Following template creates the pull secrets for images.
+*/}}
+{{- define "sulu.image_pull_secrets" }}
+    {{- printf "{\"auths\":{\"%s\":{\"Username\":\"%s\",\"Password\":\"%s\",\"Email\":\"%s\"}}}" .Values.app.image.pullSecrets.registry .Values.app.image.pullSecrets.username .Values.app.image.pullSecrets.password .Values.app.image.pullSecrets.email | b64enc }}
+{{- end }}
+{{- define "sulu.image_pull_secrets.name" -}}
+    {{- printf "%s-%s" .Release.Name "image-pull-secrets" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

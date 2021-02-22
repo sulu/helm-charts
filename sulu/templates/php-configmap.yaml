@@ -5,7 +5,7 @@ metadata:
     name: {{ .Release.Name }}-php-configmap
     labels:
         app: {{ template "sulu.fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
 data:

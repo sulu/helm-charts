@@ -5,7 +5,7 @@ metadata:
   name: {{ include "sulu.taskrunner.fullname" . }}
   labels:
     app.kubernetes.io/name: {{ include "sulu.name" . }}
-    helm.sh/chart: {{ include "sulu.chart" . }}
+    helm.sh/chart: {{ .Chart.Name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
@@ -20,7 +20,7 @@ spec:
         app.kubernetes.io/name: {{ include "sulu.taskrunner.fullname" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-{{ include (print $.Template.BasePath "/_containerspec.tpl") . | indent 6 }}
+{{ include "sulu.container.spec.tpl" . | indent 6 }}
           command: [{{ .Values.taskrunner.command | quote }}]
           resources:
 {{ toYaml .Values.taskrunner.resources | indent 12 }}
