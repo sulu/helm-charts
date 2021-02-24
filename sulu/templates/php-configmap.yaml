@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
     name: {{ .Release.Name }}-php-configmap
     labels:
-        app: {{ template "sulu.fullname" . }}
+        app: {{ include "sulu.fullname" . }}
         helm.sh/chart: {{ include "sulu.chart" . }}
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"

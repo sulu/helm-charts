@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
     name: {{ .Release.Name }}-varnish-configmap
     labels:
-        app: {{ template "sulu.varnish.fullname" . }}
+        app: {{ include "sulu.varnish.fullname" . }}
         helm.sh/chart: {{ include "sulu.chart" . }}
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"

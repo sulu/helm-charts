@@ -5,7 +5,7 @@
 {{- define "sulu.container.spec.tpl" -}}
 {{- if .Values.app.image.pullSecrets.enabled }}
 imagePullSecrets:
-  - name: {{ template "sulu.image_pull_secrets.name" . }}
+  - name: {{ include "sulu.image_pull_secrets.name" . }}
 {{- end }}
 volumes:
 {{- if .Values.app.phpConfig.enabled }}
@@ -19,7 +19,7 @@ volumes:
 {{- if .Values.app.google.enabled }}
   - name: google-bucket-config
     configMap:
-      name: {{ template "sulu.fullname" . }}-google-config
+      name: {{ include "sulu.fullname" . }}-google-config
       items:
         - key: key.json
           path: key.json
@@ -40,28 +40,28 @@ containers:
 {{- end }}
     env:
       - name: APP_ENV
-        value: {{ .Values.app.app_env }}
+        value: {{ .Values.app.app_env | quote }}
       - name: APP_SECRET
-        value: {{ .Values.app.secret }}
+        value: {{ .Values.app.secret | quote }}
       - name: SULU_ADMIN_EMAIL
-        value: {{ .Values.app.email }}
+        value: {{ .Values.app.email | quote }}
       - name: VARNISH_SERVER
-        value: {{ template "sulu.varnish.fullname" . }}
+        value: {{ include "sulu.varnish.fullname" . | quote }}
       - name: REDIS_HOST
-        value: {{ template "sulu.redis.fullname" . }}
+        value: {{ include "sulu.redis.fullname" . | quote }}
       - name: REDIS_PASSWORD
         value: {{ .Values.redis.password | quote }}
       - name: REDIS_DSN
-        value: {{ (include "sulu.redis.dsn" .) | quote }}
+        value: {{ include "sulu.redis.dsn" . | quote }}
 {{- if .Values.mysql.enabled }}
       - name: DATABASE_URL
-        value: {{ template "sulu.mysql.url" . }}
+        value: {{ include "sulu.mysql.url" . | quote }}
 {{- end }}
 {{- if .Values.app.google.enabled }}
       - name: GOOGLE_STORAGE_BUCKET_NAME
-        value: {{ .Values.app.google.bucket }}
+        value: {{ .Values.app.google.bucket | quote }}
       - name: GOOGLE_STORAGE_KEY_FILE
-        value: /etc/google/key.json
+        value: "/etc/google/key.json"
 {{- end }}
 {{- with .Values.app.env }}
 {{ toYaml . | indent 6 }}
