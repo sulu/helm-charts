@@ -5,11 +5,30 @@ lint:
     stage: lint
     image: dtzar/helm-kubectl:$HELM_VERSION
     script:
-        - helm dependency build elasticsearch && helm dependency list elasticsearch && helm lint elasticsearch --strict
-        - helm dependency build jackrabbit && helm dependency list jackrabbit && helm lint jackrabbit --strict
-        - helm dependency build mediaproxy && helm dependency list mediaproxy && helm lint mediaproxy --strict
-        - helm dependency build sulu && helm dependency list sulu && helm lint sulu --strict
-        - helm dependency build varnish && helm dependency list varnish && helm lint varnish --strict
+        - helm dependency build elasticsearch
+            && helm dependency list elasticsearch
+            && helm lint elasticsearch --strict
+            && helm template elasticsearch > template-result-elasticsearch.yaml
+        - helm dependency build jackrabbit
+            && helm dependency list jackrabbit
+            && helm lint jackrabbit --strict
+            && helm template jackrabbit > template-result-jackrabbit.yaml
+        - helm dependency build mediaproxy
+            && helm dependency list mediaproxy
+            && helm lint mediaproxy --strict
+            && helm template mediaproxy > template-result-mediaproxy.yaml
+        - helm dependency build sulu
+            && helm dependency list sulu
+            && helm lint sulu --strict
+            && helm template sulu > template-result-sulu.yaml
+        - helm dependency build varnish
+            && helm dependency list varnish
+            && helm lint varnish --strict
+            && helm template varnish > template-result-varnish.yaml
+    artifacts:
+        name: template-results
+        paths:
+            - template-result-*.yaml
 
 build:
     stage: build
@@ -34,7 +53,7 @@ build:
         # index charts directory
         - helm repo index build
         # upload updated charts and index
-        - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/        
+        - gsutil -h "Cache-Control:no-cache,max-age=0" cp build/* gs://charts.sulu.cloud/
     only:
         - master
 
