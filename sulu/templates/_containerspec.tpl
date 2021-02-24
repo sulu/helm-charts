@@ -1,6 +1,11 @@
-{{- if .Values.app.image.pullSecrets }}
+{{- define "sulu.container.spec" -}}
+{{ include "sulu.container.spec.tpl" (dict "Values" .Values.sulu "Release" .Release "Chart" .Chart) }}
+{{- end -}}
+
+{{- define "sulu.container.spec.tpl" -}}
+{{- if .Values.app.image.pullSecrets.enabled }}
 imagePullSecrets:
-  - name: {{ .Values.app.image.pullSecrets }}
+  - name: {{ template "sulu.image_pull_secrets.name" . }}
 {{- end }}
 volumes:
 {{- if .Values.app.phpConfig.enabled }}
@@ -20,7 +25,7 @@ volumes:
           path: key.json
 {{- end }}
 containers:
-  - name: {{ .Chart.Name }}
+  - name: sulu
     image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
     imagePullPolicy: {{ .Values.app.image.pullPolicy }}
     volumeMounts:
@@ -46,6 +51,8 @@ containers:
         value: {{ template "sulu.redis.fullname" . }}
       - name: REDIS_PASSWORD
         value: {{ .Values.redis.password | quote }}
+      - name: REDIS_DSN
+        value: {{ (include "sulu.redis.dsn" .) | quote }}
 {{- if .Values.mysql.enabled }}
       - name: DATABASE_URL
         value: {{ template "sulu.mysql.url" . }}
@@ -59,3 +66,4 @@ containers:
 {{- with .Values.app.env }}
 {{ toYaml . | indent 6 }}
 {{- end }}
+{{- end -}}

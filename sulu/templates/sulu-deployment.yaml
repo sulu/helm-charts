@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/name: {{ include "sulu.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-{{ include (print $.Template.BasePath "/_containerspec.tpl") . | indent 6 }}
+{{ include "sulu.container.spec.tpl" . | indent 6 }}
           ports:
             - name: http
               containerPort: 80

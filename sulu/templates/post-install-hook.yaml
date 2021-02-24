@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: {{.Release.Service | quote }}
     app.kubernetes.io/instance: {{.Release.Name | quote }}
-    helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+        helm.sh/chart: {{ include "sulu.chart" . }}
   annotations:
     helm.sh/hook: post-install
     helm.sh/hook-weight: "1"
@@ -18,10 +18,10 @@ spec:
       labels:
         app.kubernetes.io/managed-by: {{.Release.Service | quote }}
         app.kubernetes.io/instance: {{.Release.Name | quote }}
-        helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+        helm.sh/chart: {{ include "sulu.chart" . }}
     spec:
       restartPolicy: Never
-{{ include (print $.Template.BasePath "/_containerspec.tpl") . | indent 6 }}
+{{ include "sulu.container.spec.tpl" . | indent 6 }}
           command:
 {{ toYaml .Values.app.hooks.postInstall.command | indent 12 -}}
 {{- end -}}
