@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: {{.Release.Service | quote }}
     app.kubernetes.io/instance: {{.Release.Name | quote }}
-        helm.sh/chart: {{ include "sulu.chart" . }}
+    helm.sh/chart: {{ include "sulu.chart" . }}
   annotations:
     helm.sh/hook: post-install
     helm.sh/hook-weight: "1"
