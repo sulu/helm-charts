@@ -83,6 +83,7 @@ app:
             command: ["/var/www/html/bin/adminconsole", "doctrine:migrations:migrate"]
     phpConfig:
         enabled: true
+        memoryLimit: 512M
     google:
         enabled: false
         bucket: ''
