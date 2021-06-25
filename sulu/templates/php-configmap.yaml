@@ -9,7 +9,7 @@ metadata:
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
 data:
-    custom.ini: |-
+    sulu-chart.ini: |-
 {{ $file := (.Files.Get "config/php.ini") }}
 {{ tpl $file . | indent 8 }}
 {{- end }}

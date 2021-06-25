@@ -13,8 +13,8 @@ volumes:
     configMap:
       name: {{ .Release.Name }}-php-configmap
       items:
-        - key: custom.ini
-          path: custom.ini
+        - key: sulu-chart.ini
+          path: sulu-chart.ini
 {{- end }}
 {{- if .Values.app.google.enabled }}
   - name: google-bucket-config
@@ -31,8 +31,8 @@ containers:
     volumeMounts:
 {{- if .Values.app.phpConfig.enabled }}
       - name: php-config
-        mountPath: /usr/local/etc/php/conf.d/custom.ini
-        subPath: custom.ini
+        mountPath: /usr/local/etc/php/conf.d/sulu-chart.ini
+        subPath: sulu-chart.ini
 {{- end }}
 {{- if .Values.app.google.enabled }}
       - name: google-bucket-config
