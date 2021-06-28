@@ -39,6 +39,7 @@ varnish:
     resources: {}
 
 app:
+    deploymentKind: Deployment # or DaemonSet
     replicaCount: 3
     service:
         type: NodePort

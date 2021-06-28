@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: {{ .Values.app.deploymentKind }}
 metadata:
   name: {{ include "sulu.fullname" . }}
   labels:
@@ -12,7 +12,9 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
+{{- if ne .Values.app.deploymentKind "DaemonSet" }}
   replicas: {{ .Values.app.replicaCount }}
+{{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "sulu.name" . }}
