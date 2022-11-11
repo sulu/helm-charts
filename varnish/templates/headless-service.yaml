@@ -1,14 +1,16 @@
+{{- if (eq "StatefulSet" .Values.kind) -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "varnish.fullname" . }}
+  name: {{ include "varnish.fullname" . }}-headless
   labels:
-    app.kubernetes.io/name: {{ include "varnish.name" . }}
+    app.kubernetes.io/name: {{ include "varnish.name" . }}-headless
     helm.sh/chart: {{ include "varnish.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
+  clusterIP: None
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
@@ -17,3 +19,4 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "varnish.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
