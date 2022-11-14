@@ -45,8 +45,10 @@ containers:
         value: {{ .Values.app.secret | quote }}
       - name: SULU_ADMIN_EMAIL
         value: {{ .Values.app.email | quote }}
+{{- if .Values.varnish.enabled }}
       - name: VARNISH_SERVER
         value: {{ include "sulu.varnish.fullname" . | quote }}
+{{- end }}
       - name: REDIS_HOST
         value: {{ include "sulu.redis.fullname" . | quote }}
       - name: REDIS_PASSWORD

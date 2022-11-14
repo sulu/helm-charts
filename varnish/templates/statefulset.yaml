@@ -1,6 +1,6 @@
-{{- if (eq "Deployment" .Values.kind) -}}
+{{- if (eq "StatefulSet" .Values.kind) -}}
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "varnish.fullname" . }}
   labels:
@@ -9,13 +9,14 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
+  serviceName: {{ include "varnish.fullname" . }}-headless
   replicas: {{ .Values.replicas }}
-  strategy:
-    type: {{ .Values.updateStrategy }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "varnish.fullname" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+  updateStrategy:
+    type: {{ .Values.updateStrategy }}
   template:
     metadata:
       labels:
@@ -37,7 +38,7 @@ spec:
           - key: default.vcl
             path: default.vcl
       containers:
-      - name: {{ .Chart.Name }}
+      - name: {{ include "varnish.fullname" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
@@ -58,7 +59,7 @@ spec:
           containerPort: 80
           protocol: TCP
         resources:
-          {{- toYaml .Values.resources | indent 10 }}
+          {{- toYaml .Values.resources | nindent 10 }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -7,12 +7,14 @@ image:
 nameOverride: ""
 fullnameOverride: ""
 
+kind: Deployment # or StatefulSet
+replicas: 1
+updateStrategy: RollingUpdate
+varnishSize: 1G
+
 service:
     type: NodePort
     port: 80
-
-deployment:
-    varnishSize: 1G
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
