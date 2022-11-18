@@ -85,6 +85,7 @@ app:
     phpConfig:
         enabled: true
         memoryLimit: 512M
+        timezone: 'Europe/Zurich'
     google:
         enabled: false
         bucket: ''
